@@ -18,7 +18,7 @@ const config: Config = {
                 dcloudbanner: "url('/img/socials/dcloud-bg.png')",
             },
             colors: {
-                primary: "#9D44B5",
+                primary: "#012169",
                 "blur-circle": "rgba(247, 174, 248, 0.8)",
             },
             keyframes: {
