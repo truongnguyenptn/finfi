@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("./styles/custom-scrollbar.css");
+
+@media (prefers-color-scheme: dark) {
+}
+
+@layer utilities {
+    .background-animate {
+        background-size: 400%;
+
+        -webkit-animation: gradient-animation 10s ease-in-out infinite;
+        -moz-animation: gradient-animation 10s ease-in-out infinite;
+        animation: gradient-animation 10s ease-in-out infinite;
+    }
+
+    @keyframes gradient-animation {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .preferred-networks {
+        position: relative;
+    }
+
+    .selected-network-item {
+        cursor: pointer;
+    }
+
+    .selected-network-item:hover {
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .preferred-networks-dropdown-hide {
+        display: none;
+    }
+
+    .network-map {
+        display: flex;
+        flex-direction: column;
+        row-gap: 0.5rem;
+    }
+
+    .preferred-networks-dropdown {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        border-radius: 4px;
+        row-gap: 0.25rem;
+        top: 0;
+        left: 0;
+    }
+
+    .network-dropdown-item {
+        cursor: pointer;
+        background-color: white;
+        border-radius: 4px;
+    }
+
+    .network-dropdown-item:hover {
+        background-color: rgb(201, 201, 201);
+    }
+
+    .awpswap-socials {
+        background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.06) -17.86%,
+                rgba(117, 38, 119, 0.06) 100%
+            ),
+            linear-gradient(0deg, #150511 0%, #150511 100%), #1f1f24;
+    }
+    .dcloud-socials {
+        background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.06) -17.86%,
+                rgba(38, 38, 119, 0.06) 100%
+            ),
+            linear-gradient(0deg, #050815 0%, #050815 100%), #26345b;
+    }
+    .sunswap-socials {
+        background: linear-gradient(
+                180deg,
+                rgba(0, 0, 0, 0.06) -17.86%,
+                rgba(255, 200, 200, 0.06) 100%
+            ),
+            linear-gradient(0deg, #150511 0%, #150511 100%), #1f1f24;
+    }
+
+    .hero-svg-mask {
+        -webkit-mask-image: url("/img/home/svg/animating3.svg");
+        mask-image: url("/img/home/svg/animating3.svg");
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        mask-size: contain;
+        mask-position: center;
+        mask-origin: fill-box;
+    }
+
+    .rotating-wallets {
+        animation: rotatingWalletAnim 30s
+            /* cubic-bezier(0.79, 0.33, 0.14, 0.53) */
+            cubic-bezier(0.79, 0.33, 0.1, 1.01) 0s infinite backwards;
+        transform-origin: center 510px;
+        /* outline: 1px solid red; */
+    }
+
+    @keyframes rotatingWalletAnim {
+        0% {
+            transform: rotate(0deg);
+        }
+        16% {
+            transform: rotate(60deg);
+        }
+        32% {
+            transform: rotate(120deg);
+        }
+        48% {
+            transform: rotate(180deg);
+        }
+        64% {
+            transform: rotate(240deg);
+        }
+        80% {
+            transform: rotate(300deg);
+        }
+        96% {
+            transform: rotate(360deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    .AccordionChevron {
+        transition: transform 300ms;
+    }
+    .AccordionTrigger[data-state="open"] > span {
+        transform: rotate(180deg);
+    }
+}
+
+html,
+body {
+    scroll-behavior: smooth;
+}
