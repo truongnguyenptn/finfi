@@ -8,7 +8,7 @@ export const HeroSection = () => {
         <>
             <div className="flex flex-col lg:flex-row items-end lg:items-center justify-between gap-0 lg:gap-16">
                 <div className="basis-[55%]">
-                    <Chip className="mb-2 lg:mb-[-80px]">Receive Me</Chip>
+                    <Chip className="mb-2 lg:mb-[-80px]">Finfi wallet</Chip>
                     <p
                         className="text-4xl sm:text-5xl lg:text-6xl font-medium tracking-tight"
                         style={{ lineHeight: 1.345 }}

@@ -212,8 +212,8 @@ export default function Home() {
                 <div className="absolute h-[450px] w-[450px] rounded-full blur-[140px] -right-24 top-[2400px] -z-10 bg-blur-circle" />
                 <div className="max-w-screen-xl mx-auto px-4 pt-20">
                     <p className="font-bold text-[40px] text-center">
-                        Our Supported{" "}
-                        <span className="text-primary">Networks</span>
+                        Powered by{" "}
+                        <span className="text-primary"></span>
                     </p>
                     <div className="mt-20">
                         <div className="flex justify-evenly items-center flex-wrap gap-4">
