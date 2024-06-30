@@ -40,7 +40,7 @@ export const AuthDialog = ({
     const router = useRouter();
     const [appState, setAppState] = useAppState();
 
-    const { signIn } = useUnstoppableDomainAuth();
+    // const { signIn } = useUnstoppableDomainAuth();
     // const { signIn: keplrSignIn } = useKeplrAuth();
 
     if (appState?.userData?.handle) return null;
@@ -66,22 +66,24 @@ export const AuthDialog = ({
 
                     <div className="flex flex-col items-center justify-center gap-2">
                         <ConnectButton.Custom>
-                            {({ openConnectModal }) => {
-                                const handleConnect = async () => {
-                                    setIsOpen(false);
-                                    openConnectModal!();
-                                    onButtonsClick?.();
-                                    setConnected?.(true);
-                                };
+                            {({
+                                account,
+                                chain,
+                                openAccountModal,
+                                openConnectModal,
+                                openChainModal,
+                                accountLoading,
+                            }) => {
                                 return (
                                     <div>
-                                        <Button
-                                            onClick={handleConnect}
-                                            type="button"
-                                            id="connect-wallet"
+                                        <button
+                                            onClick={openConnectModal}
+                                            disabled={!!account}
                                         >
-                                            Wallet Or Social Login
-                                        </Button>
+                                            Open Connect
+                                        </button>
+                                        <br />
+                                        <br />
                                     </div>
                                 );
                             }}

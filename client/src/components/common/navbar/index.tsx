@@ -15,6 +15,7 @@ import {
 } from "@/src/actions";
 import { useRouter } from "next/navigation";
 import { useUnstoppableDomainAuth } from "@/src/context/UnstoppableDomainAuth.context";
+import { ConnectButton } from "@particle-network/connect-react-ui";
 
 export const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -29,14 +30,10 @@ export const Navbar = () => {
     const userInfo = connectKit?.particle?.auth.getUserInfo();
     const account = useAccount() || null;
 
-    const { signOut: UDSignOut } = useUnstoppableDomainAuth();
-
     const signOut = async () => {
-        setAppState(InitialAppState(false));
-
         connectKit.particle.auth.logout();
-
-        UDSignOut();
+        setAppState(InitialAppState(false));
+        connectKit.disconnect();
     };
 
     useEffect(() => {
@@ -69,124 +66,174 @@ export const Navbar = () => {
     }, [connected, userInfo]);
 
     // console.log(appState, "appState");
-
     return (
-        <>
-            <header>
-                <AuthDialog
-                    isOpen={isAuthDialogOpen}
-                    setIsOpen={setIsAuthDialogOpen}
-                    setIsLoading={setIsLoading}
-                    setConnected={setConnected}
-                    onButtonsClick={() => {
-                        setIsMenuOpen(false);
-                        setIsAuthDialogOpen(false);
-                    }}
-                />
-                <div className="bg-primary">
-                    <div className="text-white text-sm py-3 text-center max-w-screen-xl mx-auto">
-                        Integrated UNS Resolution & partner API
-                        <a
-                            href="https://devpost.com/software/receive-me-uns-ens-ux-integration?ref_content=user-portfolio&ref_feature=in_progress"
-                            target="_blank"
-                            className="underline decoration-white underline-offset-2 ml-2"
-                        >
-                            Learn More
-                        </a>
-                    </div>
+        <header>
+            <AuthDialog
+                isOpen={isAuthDialogOpen}
+                setIsOpen={setIsAuthDialogOpen}
+                setIsLoading={setIsLoading}
+                setConnected={setConnected}
+                onButtonsClick={() => {
+                    setIsMenuOpen(false);
+                    setIsAuthDialogOpen(false);
+                }}
+            />
+            {/* <div className="bg-primary">
+                <div className="text-white text-sm py-3 text-center max-w-screen-xl mx-auto">
+                    Integrated UNS Resolution & partner API
+                    <a
+                        href="https://devpost.com/software/receive-me-uns-ens-ux-integration?ref_content=user-portfolio&ref_feature=in_progress"
+                        target="_blank"
+                        className="underline decoration-white underline-offset-2 ml-2"
+                    >
+                        Learn More
+                    </a>
                 </div>
-                <nav className="max-w-screen-xl mx-auto px-4 flex text-base justify-between items-center py-3">
-                    <div className="font-bold text-3xl text-primary">Finfi</div>
-                    <div className="gap-6 font-medium hidden lg:flex">
-                        <Link href="#home">Home</Link>
-                        <Link href="#about-us">About Us</Link>
-                        {/* <Link href="#updates">Updates</Link> */}
-                        <Link href="#plans">Plans</Link>
-                        <Link href="#faqs">FAQs</Link>
-                        <Link href="mailto:support@Finfi">Contact Us</Link>
-                    </div>
-                    <div className="hidden lg:block">
-                        {appState?.userData?.handle ? (
-                            <div className="flex items-center gap-3">
-                                <Button
-                                    onClick={() =>
-                                        window.open(
-                                            `/${appState.userData?.handle}`,
-                                            "_blank",
-                                        )
-                                    }
-                                >
-                                    <span className="font-normal mr-1">@</span>
-                                    <span>{appState.userData?.handle}</span>
-                                </Button>
-
-                                <Button variant="ghost" onClick={signOut}>
-                                    Sign Out
-                                </Button>
-                            </div>
-                        ) : (
+            </div> */}
+            <nav className="max-w-screen-xl mx-auto px-4 flex text-base justify-between items-center py-3">
+                <div className="font-bold text-3xl text-primary">Finfi</div>
+                <div className="gap-6 font-medium hidden lg:flex">
+                    <Link href="#home">Home</Link>
+                    <Link href="#about-us">About Us</Link>
+                    {/* <Link href="#updates">Updates</Link> */}
+                    <Link href="#plans">Plans</Link>
+                    <Link href="#faqs">FAQs</Link>
+                    <Link href="mailto:support@Finfi">Contact Us</Link>
+                </div>
+                <div className="hidden lg:block">
+                    {!!account ? (
+                        <div className="flex items-center gap-3">
                             <Button
-                                size="lg"
-                                onClick={() => {
-                                    setIsAuthDialogOpen((p) => !p);
-                                    // setIsMenuOpen(false);
+                                onClick={async () => {
+                                    const userInfo =
+                                        connectKit?.particle?.auth.getUserInfo();
+
+                                    const userData = userInfo
+                                        ? await getUserDataByUuid(userInfo.uuid)
+                                        : null;
+                                    console.log(
+                                        appState.userData,
+                                        userInfo,
+                                        userData,
+                                    );
+
+                                    if (userData && userData?.handle) {
+                                        window.open(
+                                            `/${userData?.handle}`,
+                                            "_blank",
+                                        );
+                                        setAppState({
+                                            userInfo,
+                                        });
+                                    } else {
+                                        router.push("/onboard");
+                                    }
                                 }}
-                                disabled={isLoading}
                             >
-                                {isLoading ? "Connecting..." : "Connect Wallet"}
+                                <span className="font-normal mr-1">@</span>
+                                <span>{appState.userData?.handle}</span>
                             </Button>
-                        )}
-                    </div>
-                    <button
-                        className="relative !flex h-10 w-10 items-center justify-start rounded-lg px-0 lg:!hidden"
-                        onClick={() => setIsMenuOpen((p) => !p)}
-                    >
-                        <span
-                            className={`absolute h-[3px] w-8 bg-black transition-transform duration-200  ${
-                                isMenuOpen ? "rotate-45" : "translate-y-1.5"
-                            }`}
-                            style={{
-                                transformOrigin: "center",
-                            }}
-                        ></span>
-                        <span
-                            className={`duration-duration-200 absolute h-[3px] w-8 bg-black transition-transform  ${
-                                isMenuOpen ? "-rotate-45" : "-translate-y-1.5"
-                            }`}
-                            style={{
-                                transformOrigin: "center",
-                            }}
-                        ></span>
-                    </button>
-                    <Sheet
-                        open={isMenuOpen}
-                        onOpenChange={(o) => setIsMenuOpen(o)}
-                    >
-                        <SheetContent
-                            side="top"
-                            className="mt-[108px] p-6 pt-2 lg:hidden"
-                            sheetOverlayClassName="mt-[108px] lg:hidden"
-                            hideCloseButton
-                        >
-                            <div className="w-full h-full grid place-items-center gap-4 pt-4 border-t border-gray-200">
-                                <div className="w-full gap-6 font-medium flex flex-col items-center">
-                                    <Link
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
+
+                            <Button variant="ghost" onClick={signOut}>
+                                Sign Out
+                            </Button>
+                        </div>
+                    ) : (
+                        <ConnectButton.Custom>
+                            {({
+                                account,
+                                chain,
+                                openAccountModal,
+                                openConnectModal,
+                                openChainModal,
+                                accountLoading,
+                            }) => {
+                                return (
+                                    <Button
+                                        size="lg"
+                                        onClick={async () => {
+                                            console.log(
+                                                "connect button clicked",
+                                            );
+                                            openConnectModal?.();
+
+                                            setConnected?.(true);
+
+                                            const userInfo =
+                                                connectKit?.particle?.auth.getUserInfo();
+                                            console.log(userInfo);
+                                            const userData = userInfo
+                                                ? await getUserDataByUuid(
+                                                      userInfo.uuid,
+                                                  )
+                                                : null;
+                                            if (
+                                                !appState.userData &&
+                                                userInfo &&
+                                                account
+                                            ) {
+                                                setAppState({
+                                                    userData,
+                                                });
+                                                router.push("/onboard");
+                                            }
                                         }}
-                                        href="#home"
+                                        disabled={!!account}
                                     >
-                                        Home
-                                    </Link>
-                                    <Link
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                        }}
-                                        href="#about-us"
-                                    >
-                                        About Us
-                                    </Link>
-                                    {/* <Link
+                                        Connect wallet
+                                    </Button>
+                                );
+                            }}
+                        </ConnectButton.Custom>
+                    )}
+                </div>
+                <button
+                    className="relative !flex h-10 w-10 items-center justify-start rounded-lg px-0 lg:!hidden"
+                    onClick={() => setIsMenuOpen((p) => !p)}
+                >
+                    <span
+                        className={`absolute h-[3px] w-8 bg-black transition-transform duration-200  ${
+                            isMenuOpen ? "rotate-45" : "translate-y-1.5"
+                        }`}
+                        style={{
+                            transformOrigin: "center",
+                        }}
+                    ></span>
+                    <span
+                        className={`duration-duration-200 absolute h-[3px] w-8 bg-black transition-transform  ${
+                            isMenuOpen ? "-rotate-45" : "-translate-y-1.5"
+                        }`}
+                        style={{
+                            transformOrigin: "center",
+                        }}
+                    ></span>
+                </button>
+                <Sheet open={isMenuOpen} onOpenChange={(o) => setIsMenuOpen(o)}>
+                    <SheetContent
+                        side="top"
+                        className="mt-[108px] p-6 pt-2 lg:hidden"
+                        sheetOverlayClassName="mt-[108px] lg:hidden"
+                        hideCloseButton
+                    >
+                        <div className="w-full h-full grid place-items-center gap-4 pt-4 border-t border-gray-200">
+                            <div className="w-full gap-6 font-medium flex flex-col items-center">
+                                <Link
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                    }}
+                                    href="#home"
+                                >
+                                    Home
+                                </Link>
+                                <Link
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                    }}
+                                    href="#about-us"
+                                >
+                                    About Us
+                                </Link>
+                                {/* <Link
                                         onClick={() => {
                                             setIsMenuOpen(false);
                                         }}
@@ -194,77 +241,84 @@ export const Navbar = () => {
                                     >
                                         Updates
                                     </Link> */}
-                                    <Link
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                        }}
-                                        href="#plans"
-                                    >
-                                        Plans
-                                    </Link>
-                                    <Link
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                        }}
-                                        href="#faqs"
-                                    >
-                                        FAQs
-                                    </Link>
-                                    <Link
-                                        onClick={() => {
-                                            setIsMenuOpen(false);
-                                        }}
-                                        href="mailto:support@Finfi"
-                                    >
-                                        Contact Us
-                                    </Link>
-                                </div>
-                                <div className="border-t border-gray-200 pt-4 w-full grid place-items-center">
-                                    {appState?.userData?.handle ? (
-                                        <div className="flex items-center gap-3">
-                                            <Button
-                                                onClick={() =>
-                                                    window.open(
-                                                        `/${appState.userData?.handle}`,
-                                                        "_blank",
-                                                    )
-                                                }
-                                            >
-                                                <span className="font-normal text-gray-200 mr-2">
-                                                    @
-                                                </span>
-                                                <span>
-                                                    {appState.userData?.handle}
-                                                </span>
-                                            </Button>
-
-                                            <Button
-                                                variant="ghost"
-                                                onClick={signOut}
-                                            >
-                                                Sign Out
-                                            </Button>
-                                        </div>
-                                    ) : (
-                                        <Button
-                                            size="lg"
-                                            onClick={() => {
-                                                setIsAuthDialogOpen((p) => !p);
-                                                setIsMenuOpen(false);
-                                            }}
-                                            disabled={isLoading}
-                                        >
-                                            {isLoading
-                                                ? "Connecting..."
-                                                : "Connect Wallet"}
-                                        </Button>
-                                    )}
-                                </div>
+                                <Link
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                    }}
+                                    href="#plans"
+                                >
+                                    Plans
+                                </Link>
+                                <Link
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                    }}
+                                    href="#faqs"
+                                >
+                                    FAQs
+                                </Link>
+                                <Link
+                                    onClick={() => {
+                                        setIsMenuOpen(false);
+                                    }}
+                                    href="mailto:support@Finfi"
+                                >
+                                    Contact Us
+                                </Link>
                             </div>
-                        </SheetContent>
-                    </Sheet>
-                </nav>
-            </header>
-        </>
+                            <div className="border-t border-gray-200 pt-4 w-full grid place-items-center">
+                                {account ? (
+                                    <div className="flex items-center gap-3">
+                                        <Button
+                                            onClick={() =>
+                                                window.open(
+                                                    `/${appState.userData?.handle}`,
+                                                    "_blank",
+                                                )
+                                            }
+                                        >
+                                            <span className="font-normal text-gray-200 mr-2">
+                                                @
+                                            </span>
+                                            <span>
+                                                {appState.userData?.handle}
+                                            </span>
+                                        </Button>
+
+                                        <Button
+                                            variant="ghost"
+                                            onClick={signOut}
+                                        >
+                                            Sign Out
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <ConnectButton.Custom>
+                                        {({
+                                            account,
+                                            chain,
+                                            openAccountModal,
+                                            openConnectModal,
+                                            openChainModal,
+                                            accountLoading,
+                                        }) => {
+                                            return (
+                                                <Button
+                                                    size="lg"
+                                                    onClick={openConnectModal}
+                                                    disabled={!!account}
+                                                >
+                                                    Connect wallet
+                                                </Button>
+                                            );
+                                        }}
+                                    </ConnectButton.Custom>
+                                )}
+                            </div>
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </nav>
+        </header>
     );
 };

@@ -5,15 +5,15 @@ import { AppState, InitialAppState } from "../types/state/app-state.type";
 import { AuthCoreContextProvider } from "@particle-network/auth-core-modal";
 import { ModalProvider } from "@particle-network/connect-react-ui";
 import { WalletEntryPosition } from "@particle-network/auth";
-// import {
-//     Ethereum,
-//     EthereumGoerli,
-//     Avalanche,
-//     AvalancheTestnet,
-//     ArbitrumNova,
-//     BNBChain,
-//     BNBChainTestnet,
-// } from "@particle-network/chains";
+import {
+    Ethereum,
+    EthereumGoerli,
+    Avalanche,
+    AvalancheTestnet,
+    ArbitrumNova,
+    BNBChain,
+    BNBChainTestnet,
+} from "@particle-network/chains";
 import { evmWallets } from "@particle-network/connect";
 import UserInfoSetter from "./UserInfoSetter";
 import particle from "./particle";
@@ -61,14 +61,7 @@ export const AppStateProvider = ({
                     projectId: process.env.NEXT_PUBLIC_PROJECT_ID as string,
                     clientKey: process.env.NEXT_PUBLIC_CLIENT_KEY as string,
                     appId: process.env.NEXT_PUBLIC_APP_ID as string,
-                    chains: [
-                        // Ethereum,
-                        // EthereumGoerli,
-                        // Avalanche,
-                        // AvalancheTestnet,
-                        // BNBChain,
-                        // BNBChainTestnet,
-                    ],
+                    chains: [Avalanche, AvalancheTestnet],
                     particleWalletEntry: {
                         //optional: particle wallet config
                         displayWalletEntry: true, //display wallet button when connect particle success.

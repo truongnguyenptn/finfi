@@ -36,10 +36,6 @@ const FAQS = [
         a: "Finfi is currently free! However, this will not be the case forever so claim a profile while you can!",
     },
     {
-        q: "Can we login with ENS?",
-        a: "Yes, Finfi supports ENS!",
-    },
-    {
         q: "Can we connect social networks?",
         a: "Yes, on Finfi you can connect various social networks instagram, twitter, discord etc",
     },
@@ -212,8 +208,7 @@ export default function Home() {
                 <div className="absolute h-[450px] w-[450px] rounded-full blur-[140px] -right-24 top-[2400px] -z-10 bg-blur-circle" />
                 <div className="max-w-screen-xl mx-auto px-4 pt-20">
                     <p className="font-bold text-[40px] text-center">
-                        Powered by{" "}
-                        <span className="text-primary"></span>
+                        Powered by <span className="text-primary"></span>
                     </p>
                     <div className="mt-20">
                         <div className="flex justify-evenly items-center flex-wrap gap-4">
@@ -223,17 +218,7 @@ export default function Home() {
                                 className="w-[200px]"
                             />
                             <img
-                                src="/img/home/networks/polygon.png"
-                                alt=""
-                                className="w-[200px]"
-                            />
-                            <img
-                                src="/img/handle/ud-logo-text.svg"
-                                alt=""
-                                className="w-[200px]"
-                            />
-                            <img
-                                src="/img/home/networks/tron.png"
+                                src="/img/home/networks/avax.png"
                                 alt=""
                                 className="w-[200px]"
                             />

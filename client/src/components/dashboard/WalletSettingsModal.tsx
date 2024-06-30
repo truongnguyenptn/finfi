@@ -54,13 +54,6 @@ export function WalletSettingsModal({
                 image: "/img/3p/avaxpng.png",
                 name: "AVAX",
             },
-            {
-                key: "matic",
-                state: false,
-                image: "/img/3p/matic.png",
-                name: "POLYGON",
-            },
-            { key: "bnb", state: false, image: "/img/3p/bnb.png", name: "BSC" },
         ].map((walletObj) => {
             return {
                 ...walletObj,

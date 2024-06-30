@@ -7,10 +7,6 @@ import { WalletQRCodeModal } from "./WalletQRCodeModal";
 import Algorand from "../../../public/img/networks/algo.png";
 import Eth from "../../../public/img/networks/eth.png";
 import Avax from "../../../public/img/networks/avax.png";
-import Tron from "../../../public/img/networks/trx.png";
-import Bnb from "../../../public/img/networks/bnb.png";
-import Matic from "../../../public/img/networks/matic.png";
-import Cosmos from "../../../public/img/networks/cosmos-outline-light.png";
 // import styles from "Wallet.module.css"
 import "../../app/globals.css";
 import { useQuery } from "@tanstack/react-query";
@@ -29,21 +25,7 @@ type WalletProps = {
 };
 
 const getNetworkImage = (network: string) => {
-    return network === "eth"
-        ? Eth.src
-        : network === "tron"
-        ? Tron.src
-        : network === "avax"
-        ? Avax.src
-        : network === "algorand"
-        ? Algorand.src
-        : network === "polygon" || network == "matic"
-        ? Matic.src
-        : network === "bnb"
-        ? Bnb.src
-        : network === "cosmos"
-        ? Cosmos.src
-        : "";
+    return network === "eth" ? Eth.src : Avax.src;
 };
 
 // const formatData = (data: WalletProps["wallet"]) => {

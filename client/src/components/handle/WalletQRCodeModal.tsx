@@ -18,15 +18,9 @@ export function WalletQRCodeModal({
     function closeModal() {
         setIsOpen(false);
     }
-    let explorerLink;
-    if (network.toUpperCase() == "TRON") {
-        explorerLink = `https://tronscan.org/address/${address}`;
-    } else if (network.toUpperCase() == "ETH") {
+    let explorerLink = `https://avascan.info/blockchain/c/address/${address}`;
+    if (network.toUpperCase() == "ETH") {
         explorerLink = `https://etherscan.io/address/${address}`;
-    } else if (network.toUpperCase() == "BNB") {
-        explorerLink = `https://bscscan.com/address/${address}`;
-    } else if (network.toUpperCase() == "MATIC") {
-        explorerLink = `hddettps://polygonscan.com/address/${address}`;
     }
     return (
         <>

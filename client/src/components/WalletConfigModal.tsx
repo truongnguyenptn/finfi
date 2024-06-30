@@ -72,15 +72,6 @@ export function WalletConfigModal({
                                         <div>
                                             <input
                                                 type="checkbox"
-                                                id="matic"
-                                                name="matic"
-                                                checked
-                                            />
-                                            <label htmlFor="matic">MATIC</label>
-                                        </div>
-                                        <div>
-                                            <input
-                                                type="checkbox"
                                                 id="avax"
                                                 name="avax"
                                             />

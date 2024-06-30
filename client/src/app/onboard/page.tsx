@@ -519,7 +519,7 @@ function Link({ handle, show, next, appState, setAppState }: StageProps) {
                                     </span>
 
                                     <span className="ml-1.5 text-xs text-gray-600 truncate ">
-                                        Networks: ETH, MATIC... (EVM)
+                                        Networks: ETH, AVAX... (EVM)
                                     </span>
                                     <div className=" flex-end px-1.5 py-1.5 bg-gray-200 hover:scale-[1.10] transition">
                                         <img
@@ -574,7 +574,7 @@ function Link({ handle, show, next, appState, setAppState }: StageProps) {
                                     </span>
 
                                     <span className="ml-1.5 text-xs text-gray-600 truncate ">
-                                        Networks: ETH, MATIC... (EVM)
+                                        Networks: ETH, AVAX... (EVM)
                                     </span>
                                     <div className="px-1.5 py-1.5 bg-gray-200 hover:scale-[1.10] transition">
                                         <img
@@ -907,7 +907,7 @@ export default function Onboard() {
 
     const [stage, setStage] = useState<Stage>("handle");
 
-    const { auth } = useUnstoppableDomainAuth();
+    // const { auth } = useUnstoppableDomainAuth();
 
     const nextStage = () => {
         if (stage === "handle") setStage("link");

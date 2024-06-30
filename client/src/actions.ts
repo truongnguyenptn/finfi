@@ -200,7 +200,7 @@ export async function createUserProfile(
 ) {
     // TODO; seperate socials & wallets
     const { theme, banner } = profile;
-    console.log(userInfo);
+    console.log(userInfo, 'createUserprofile')
     const info_token =
         userInfo?.token || unstoppableAuth?.token || keplrAuth?.uuid;
     const uuid = userInfo?.uuid || unstoppableAuth?.uuid || keplrAuth?.uuid;
@@ -214,9 +214,9 @@ export async function createUserProfile(
             data: {
                 handle: handle.toLowerCase(),
                 authuuid: uuid,
-                domain: unstoppableAuth?.domain
-                    ? [unstoppableAuth?.domain]
-                    : [],
+                // domain: unstoppableAuth?.domain
+                //     ? [unstoppableAuth?.domain]
+                //     : [],
             },
         });
 
@@ -262,15 +262,7 @@ export async function createUserProfile(
                             network: wallets[i].walletProvider,
                             address: wallets[i].walletAddress,
                             preferrednetworks:
-                                wallets[i].walletProvider == "metamask"
-                                    ? // ? ["eth", "avax", "bnb"]
-                                      ["matic", "eth"]
-                                    : wallets[i].walletProvider == "particle"
-                                    ? // ? ["eth", "avax", "bnb"]
-                                      ["matic", "eth"]
-                                    : wallets[i].walletProvider == "tron"
-                                    ? ["tron"]
-                                    : ["algo"],
+                                ["avax", "eth"]
                         },
                     });
                     console.log("successuflly inserted wallet");
@@ -290,13 +282,13 @@ export async function createUserProfile(
                         address: unstoppableWalletAddress
                             ? String(unstoppableWalletAddress)
                             : String(particleWalletAddress),
-                        preferrednetworks: ["matic", "eth"], // ["eth", "avax", "bnb"],
+                        preferrednetworks: ["avax", "eth"],
                     },
                 });
                 unstoppableWalletAddress
                     ? console.log(
-                          "successuflly inserted unstoppable domains wallet",
-                      )
+                        "successuflly inserted unstoppable domains wallet",
+                    )
                     : console.log("successuflly inserted particle wallet");
             } catch (error) {
                 console.error("Wallet insertion err:", error);

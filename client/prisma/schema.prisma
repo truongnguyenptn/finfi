@@ -14,9 +14,9 @@ datasource db {
 model User {
   id          String    @id @default(uuid())
   created     DateTime  @default(now())
-  handle      String    @unique
+  handle      String    
   authuuid    String?
-  domain      String[]  @unique
+  domain      String[]  
   Profile     profile[]
   Social      social[]
   Wallet      wallet[]
