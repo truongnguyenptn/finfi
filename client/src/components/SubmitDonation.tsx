@@ -1,65 +1,54 @@
 "use client";
 import React, { useState, useEffect } from "react";
-
-// Wagmi
-import { useContract, useSigner } from "wagmi";
-// Address + ABI
-import contractABI from "../../contracts/ABI/BuyMeCoffee.json";
-import { Button } from "@/src/components/ui/button";
-
-// Ethers
+import { useReadContract, useWalletClient } from "wagmi";
+import contractABI from "@/src/contracts/ABI/Donation.json";
 import { ethers } from "ethers";
+import { Button, Modal, Form, Input, notification } from "antd";
+
 const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
 
 export default function SubmitDonation() {
-    const toast = useToast();
     const [success, setSuccess] = useState(null);
     const [loading, setLoading] = useState(null);
     const [name, setName] = useState(null);
     const [memo, setMemo] = useState(null);
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const { data: signer } = useWalletClient();
+    const contractOnMumbai = useReadContract({
+        addressOrName: contractAddress,
+        contractInterface: contractABI,
+        signerOrProvider: signer,
+    });
+
     useEffect(() => {
         if (success) {
-            toast({
-                title: "Success!",
-                status: "success",
-                duration: 4000,
-                isClosable: false,
-                position: "bottom-right",
+            notification.success({
+                message: "Success!",
+                description: "Transaction was successful.",
+                placement: "bottomRight",
+                duration: 4,
             });
         }
 
         if (loading) {
-            toast({
-                title: "Waiting...",
-                status: "loading",
-                duration: 4000,
-                isClosable: false,
-                position: "bottom-right",
+            notification.info({
+                message: "Waiting...",
+                description: "Transaction is being processed.",
+                placement: "bottomRight",
+                duration: 4,
             });
         }
     }, [success, loading]);
 
-    const signer = useSigner();
-    const contractOnMumbai = useContract({
-        addressOrName: contractAddress,
-        contractInterface: contractABI,
-        signerOrProvider: signer.data,
-    });
-
-    const buyACoffee = async (coffee: any) => {
+    const buyACoffee = async (coffee) => {
         try {
             setSuccess(false);
             setLoading(false);
             if (contractOnMumbai) {
-                let deposit;
-                if (coffee) {
-                    // true
-                    deposit = ethers.utils.parseEther("0.001");
-                } else {
-                    // false
-                    deposit = ethers.utils.parseEther("0.01");
-                }
+                let deposit = coffee
+                    ? ethers.utils.parseEther("0.001")
+                    : ethers.utils.parseEther("0.01");
                 const txn = await contractOnMumbai.buyCoffee(name, memo, {
                     value: deposit,
                     gasLimit: 900000,
@@ -71,94 +60,84 @@ export default function SubmitDonation() {
             } else {
                 setSuccess(false);
                 setLoading(false);
-                alert(
-                    "Oops! Something went wrong. Please refresh & try again.",
-                );
+                notification.error({
+                    message: "Error",
+                    description:
+                        "Something went wrong. Please refresh and try again.",
+                    placement: "bottomRight",
+                    duration: 4,
+                });
             }
         } catch (error) {
             setSuccess(false);
             setLoading(false);
-            alert("Oops! Something went wrong. Please refresh & try again.");
+            notification.error({
+                message: "Error",
+                description:
+                    "Something went wrong. Please refresh and try again.",
+                placement: "bottomRight",
+                duration: 4,
+            });
         }
+    };
+
+    const showModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     return (
         <>
-            <Button
-                onClick={onOpen}
-                colorScheme={"pink"}
-                bg={"pink.300"}
-                rounded={"full"}
-                px={6}
-                _hover={{
-                    bg: "pink.500",
-                }}
-            >
+            <Button type="primary" onClick={showModal}>
                 Send Coffee
             </Button>
-            {/* Modal Form */}
-            <Modal isOpen={isOpen} onClose={onClose}>
-                <ModalOverlay />
-                <ModalContent>
-                    <ModalHeader>Send Coffee ☕️</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <p>
-                            Coffee = 0.001 MATIC
-                            <br></br>
-                            Large Coffee = 0.01 MATIC
-                            <br></br>
-                            <br></br>
-                        </p>
-                        {/* Q1 */}
-                        <FormControl>
-                            <FormLabel>
-                                <b>From</b>
-                            </FormLabel>
-                            <Input
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Your Name"
-                            />
-                        </FormControl>
-                        {/* Q2 */}
-                        <FormControl mt={4}>
-                            <FormLabel>
-                                <b>Memo</b>
-                            </FormLabel>
-                            <Input
-                                onChange={(e) => setMemo(e.target.value)}
-                                placeholder="Type a Short Message"
-                            />
-                        </FormControl>
-                    </ModalBody>
-                    <ModalFooter>
-                        {/* Donate Coffee */}
-                        <Button
-                            colorScheme={"pink"}
-                            bg={"pink.300"}
-                            mr={3}
-                            onClick={() => buyACoffee(true)}
-                            _hover={{
-                                bg: "pink.500",
-                            }}
-                        >
-                            Send Coffee
-                        </Button>
-                        {/* Donate Large Coffee*/}
-                        <Button
-                            colorScheme={"pink"}
-                            bg={"pink.300"}
-                            mr={3}
-                            onClick={() => buyACoffee(false)}
-                            _hover={{
-                                bg: "pink.500",
-                            }}
-                        >
-                            Send Large Coffee
-                        </Button>
-                        <Button onClick={onClose}>Cancel</Button>
-                    </ModalFooter>
-                </ModalContent>
+            <Modal
+                title="Send Coffee ☕️"
+                visible={isModalOpen}
+                onCancel={handleCancel}
+                footer={null}
+            >
+                <p>
+                    Coffee = 0.001 AVAX
+                    <br />
+                    Large Coffee = 0.01 AVAX
+                    <br />
+                    <br />
+                </p>
+                <Form layout="vertical">
+                    <Form.Item label="From">
+                        <Input
+                            onChange={(e) => setName(e.target.value)}
+                            placeholder="Your Name"
+                        />
+                    </Form.Item>
+                    <Form.Item label="Memo">
+                        <Input
+                            onChange={(e) => setMemo(e.target.value)}
+                            placeholder="Type a Short Message"
+                        />
+                    </Form.Item>
+                </Form>
+                <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                        type="primary"
+                        onClick={() => buyACoffee(true)}
+                        style={{ marginRight: "10px" }}
+                    >
+                        Send Coffee
+                    </Button>
+                    <Button
+                        type="primary"
+                        onClick={() => buyACoffee(false)}
+                        style={{ marginRight: "10px" }}
+                    >
+                        Send Large Coffee
+                    </Button>
+                    <Button onClick={handleCancel}>Cancel</Button>
+                </div>
             </Modal>
         </>
     );

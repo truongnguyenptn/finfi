@@ -10,7 +10,7 @@ import { notFound } from "next/navigation";
 import { Button } from "@/src/components/ui/button";
 import { CollectablesDialog } from "@/src/components/handle/collectables";
 import { getUserDomains as getDomains } from "@/src/actions";
-import SubmitDonation from "@/src/components/SubmitDonation";
+// import SubmitDonation from "@/src/components/SubmitDonation";
 
 async function getUserByHandle(handle: string) {
     try {
@@ -242,7 +242,7 @@ export default async function Profile({
                                 )}
                             </div>
                         </div>
-                        <SubmitDonation />
+                        {/* <SubmitDonation /> */}
 
                         <div className="mt-4 flex w-full items-center justify-center">
                             <span className="text-sm font-bold text-gray-300">
